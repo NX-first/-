@@ -1,0 +1,1750 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# <h1>Table of Contents<span class="tocSkip"></span></h1>
+# <div class="toc"><ul class="toc-item"><li><span><a href="#载包及附件处理" data-toc-modified-id="载包及附件处理-1">
+<span class="toc-item-num">1&nbsp;&nbsp;</span>载包及附件处理</a></span><ul class="toc-item"><li><span><a href="#附件信息" data-toc-modified-id="附件信息-1.1">
+<span class="toc-item-num">1.1&nbsp;&nbsp;</span>附件信息</a></span></li><li><span><a href="#附件处理" data-toc-modified-id="附件处理-1.2">
+<span class="toc-item-num">1.2&nbsp;&nbsp;</span>附件处理</a></span></li></ul></li><li><span><a href="#数据预处理" data-toc-modified-id="数据预处理-2">
+<span class="toc-item-num">2&nbsp;&nbsp;</span>数据预处理</a></span><ul class="toc-item"><li><span><a href="#重复数据处理" data-toc-modified-id="重复数据处理-2.1">
+<span class="toc-item-num">2.1&nbsp;&nbsp;</span>重复数据处理</a></span></li><li><span><a href="#缺失值处理" data-toc-modified-id="缺失值处理-2.2">
+<span class="toc-item-num">2.2&nbsp;&nbsp;</span>缺失值处理</a></span></li><li><span><a href="#拉格朗日插值法" data-toc-modified-id="拉格朗日插值法-2.3">
+<span class="toc-item-num">2.3&nbsp;&nbsp;</span>拉格朗日插值法</a></span></li><li><span><a href="#归一化处理" data-toc-modified-id="归一化处理-2.4">
+<span class="toc-item-num">2.4&nbsp;&nbsp;</span>归一化处理</a></span></li></ul></li><li><span><a href="#造假公司数据" data-toc-modified-id="造假公司数据-3">
+<span class="toc-item-num">3&nbsp;&nbsp;</span>造假公司数据</a></span></li><li><span><a href="#特征指标筛选" data-toc-modified-id="特征指标筛选-4">
+<span class="toc-item-num">4&nbsp;&nbsp;</span>特征指标筛选</a></span><ul class="toc-item"><li><span><a href="#导入数据" data-toc-modified-id="导入数据-4.1">
+<span class="toc-item-num">4.1&nbsp;&nbsp;</span>导入数据</a></span></li><li><span><a href="#标准化数据" data-toc-modified-id="标准化数据-4.2">
+<span class="toc-item-num">4.2&nbsp;&nbsp;</span>标准化数据</a></span></li><li><span><a href="#过滤法" data-toc-modified-id="过滤法-4.3">
+<span class="toc-item-num">4.3&nbsp;&nbsp;</span>过滤法</a></span></li><li><span><a href="#造假股票行业分类" data-toc-modified-id="造假股票行业分类-4.4">
+<span class="toc-item-num">4.4&nbsp;&nbsp;</span>造假股票行业分类</a></span></li><li><span><a href="#特征因子选择" data-toc-modified-id="特征因子选择-4.5">
+<span class="toc-item-num">4.5&nbsp;&nbsp;</span>特征因子选择</a></span></li></ul></li><li><span><a href="#模型搭建及模型评价" data-toc-modified-id="模型搭建及模型评价-5">
+<span class="toc-item-num">5&nbsp;&nbsp;</span>模型搭建及模型评价</a></span><ul class="toc-item"><li><span><a href="#数据准备" data-toc-modified-id="数据准备-5.1">
+<span class="toc-item-num">5.1&nbsp;&nbsp;</span>数据准备</a></span></li><li><span><a href="#逻辑回归模型" data-toc-modified-id="逻辑回归模型-5.2">
+<span class="toc-item-num">5.2&nbsp;&nbsp;</span>逻辑回归模型</a></span></li><li><span><a href="#决策树模型" data-toc-modified-id="决策树模型-5.3">
+<span class="toc-item-num">5.3&nbsp;&nbsp;</span>决策树模型</a></span></li><li><span><a href="#支持向量机模型" data-toc-modified-id="支持向量机模型-5.4">
+<span class="toc-item-num">5.4&nbsp;&nbsp;</span>支持向量机模型</a></span></li><li><span><a href="#GBDT算法模型" data-toc-modified-id="GBDT算法模型-5.5">
+<span class="toc-item-num">5.5&nbsp;&nbsp;</span>GBDT算法模型</a></span></li></ul></li><li><span><a href="#模型选择——决策树" data-toc-modified-id="模型选择——决策树-6">
+<span class="toc-item-num">6&nbsp;&nbsp;</span>模型选择——决策树</a></span><ul class="toc-item"><li><span><a href="#主成分分析" data-toc-modified-id="主成分分析-6.1">
+<span class="toc-item-num">6.1&nbsp;&nbsp;</span>主成分分析</a></span></li><li><span><a href="#递归特征选择" data-toc-modified-id="递归特征选择-6.2">
+<span class="toc-item-num">6.2&nbsp;&nbsp;</span>递归特征选择</a></span></li></ul></li><li><span><a href="#决策树预测第六年造假" data-toc-modified-id="决策树预测第六年造假-7">
+<span class="toc-item-num">7&nbsp;&nbsp;</span>决策树预测第六年造假</a></span><ul class="toc-item"><li><span><a href="#制造业造假预测" data-toc-modified-id="制造业造假预测-7.1">
+<span class="toc-item-num">7.1&nbsp;&nbsp;</span>制造业造假预测</a></span></li><li><span><a href="#信息传输、软件和信息技术服务业第六年造假预测" data-toc-modified-id="信息传输、软件和信息技术服务业第六年造假预测-7.2">
+<span class="toc-item-num">7.2&nbsp;&nbsp;</span>信息传输、软件和信息技术服务业第六年造假预测</a></span></li><li><span><a href="#采矿业造假预测" data-toc-modified-id="采矿业造假预测-7.3">
+<span class="toc-item-num">7.3&nbsp;&nbsp;</span>采矿业造假预测</a></span></li><li><span><a href="#电力、热力、燃气及水生产和供应业造假预测" data-toc-modified-id="电力、热力、燃气及水生产和供应业造假预测-7.4">
+<span class="toc-item-num">7.4&nbsp;&nbsp;</span>电力、热力、燃气及水生产和供应业造假预测</a></span></li><li><span><a href="#房地产业造假预测" data-toc-modified-id="房地产业造假预测-7.5">
+<span class="toc-item-num">7.5&nbsp;&nbsp;</span>房地产业造假预测</a></span></li></ul></li></ul></div>
+# # 载包及附件处理
+# In[1]:
+# 编程目的：
+## 1、找出影响公司造价相关特征；2、预测第六年哪些公司会造价
+# 数据处理：
+## 重复值处理、缺失值处理、拉格朗日插值法、归一化处理、标准化处理
+# 数据预测：
+## 1-5年数据作为训练集，第6年数据作为测试集，测试第六年可能会造价的公司
+
+
+# In[50]:
+
+
+import shutil
+import random
+import os
+
+import seaborn as sns
+import scipy as sp
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from scipy.interpolate import lagrange 
+from sklearn.impute import SimpleImputer
+from sklearn import preprocessing
+from sklearn import metrics
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+get_ipython().run_line_magic('matplotlib', 'inline')
+
+
+# ## 附件信息
+
+# In[51]:
+
+
+os.chdir('G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/基础数据')
+fujian_1 = pd.read_excel("./附件1.xlsx")
+fujian_2 = pd.read_csv(r'./附件2.csv',encoding = 'utf-8',engine = 'python')
+fujian_3 = pd.read_excel("./附件3.xlsx")
+
+
+# In[4]:
+
+
+#附件一
+fujian_1
+
+
+# In[5]:
+
+
+print(fujian_1.shape) # 行列
+print(fujian_1.info()) # 数据)# 数据
+print(fujian_1.isnull().any()) # 缺失属性
+
+
+# In[6]:
+
+
+# 附件二
+fujian_2
+
+
+# In[7]:
+
+
+print(fujian_2.shape) # 行列
+print(fujian_2.info()) # 数据)# 数据
+print(fujian_2.isnull().any()) # 缺失属性
+
+
+# In[8]:
+
+
+# 附件三
+fujian_3
+
+
+# In[9]:
+
+
+print(fujian_3.shape) # 行列
+print(fujian_3.info()) # 数据)# 数据
+print(fujian_3.isnull().any()) # 缺失属性
+
+
+# ## 附件处理
+
+# In[10]:
+
+
+# 读取文件
+# 数据通过Excel处理
+os.chdir('G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/基础数据')
+fujianG_1 = pd.read_excel("./附件1_改.xlsx")
+fujianG_2 = pd.read_csv("./附件2_改.csv")
+fujian_hb = pd.read_csv(r'./附件合并.csv',engine = 'python')
+
+
+# In[11]:
+
+
+#附件一改
+fujianG_1
+
+
+# In[12]:
+
+
+#附件二改
+fujianG_2
+
+
+# In[13]:
+
+
+# 附件合并
+fujian_hb
+
+
+# # 数据预处理
+
+# ## 重复数据处理
+
+# In[14]:
+
+
+# 通过Excel初步进行重复值和缺失值处理
+
+
+# In[15]:
+
+
+os.chdir('G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/基础数据')
+fujianGqc_2 = pd.read_csv("./附件2_改去重.csv",engine = 'python')
+fujianGqs_2 = pd.read_csv("./附件2_改去缺.csv",engine = 'python')
+
+
+# In[16]:
+
+
+fujianGqc_2
+
+
+# In[17]:
+
+
+fujianGqs_2
+
+
+# In[18]:
+
+
+# 通过Excel将数据分类为1-5年数据和6年数据
+# 1-5年数据作为训练集，6年数据作为测试集
+
+
+# In[52]:
+
+
+os.chdir('G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据')
+fujian_1_5 = pd.read_csv("./1-5年原始数据.csv",engine = 'python')
+# 重复行合并，特征向量均值化
+raw_df=fujian_1_5.groupby(by='股票代码').mean()
+raw_df.sort_index(ascending=False,inplace=True)
+raw_df.to_csv('./1-5年合并数据.csv',encoding="gbk")
+# 通过Excel优化1-5年数据
+os.chdir('G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据')
+fujian_1_5 = pd.read_csv("./1-5年数据.csv",engine = 'python')
+
+
+# ## 缺失值处理
+
+# In[20]:
+
+
+# 第1-5年股票维度缺失散点图
+
+
+# In[21]:
+
+
+# 统计行缺失个数
+np.sum(fujian_1_5.isnull(),axis = 1)
+
+
+# In[22]:
+
+
+# 统计行的缺失率
+fujian_1_5_hqsl = fujian_1_5.apply(lambda x:sum(x.isnull())/len(x),axis=1)
+fujian_1_5_hqsl
+
+
+# In[23]:
+
+
+plt.rcParams['font.sans-serif']='SimHei'
+name=range(4152)#直接标签股票
+values=fujian_1_5_hqsl#缺失率
+plt.figure(figsize=(16,6))
+plt.scatter(name,values,marker='o',c='red')
+plt.xlabel('第1-5年股票序列')
+plt.ylabel('缺失率')
+plt.title('第1-5年股票数据缺失率')
+plt.grid(True)
+plt.savefig("./图片/第1-5年股票维度缺失率.png")
+plt.show()
+
+
+# In[24]:
+
+
+# 第6年特征维度缺失散点图
+
+
+# In[25]:
+
+
+# 统计列缺失个数
+np.sum(fujian_1_5.isnull(),axis = 0)
+
+
+# In[26]:
+
+
+# 统计行的缺失率
+fujian_1_5_lqsl = fujian_1_5.apply(lambda x:sum(x.isnull())/len(x),axis=0)
+fujian_1_5_lqsl
+
+
+# In[27]:
+
+
+plt.rcParams['font.sans-serif']='SimHei'
+name = range(286)#提取其中的column数组，视为数据的标签
+values=fujian_1_5_lqsl#缺失率
+plt.figure(figsize=(16,6))
+plt.scatter(name,values,marker='o',c='blue')
+plt.xlabel('股票特征因子')
+plt.ylabel('缺失率')
+plt.title('第1-5年股票特征数据缺失率')
+plt.grid(True)
+plt.savefig("./图片/第1-5年特征维度缺失率.png")
+plt.show()
+
+
+# In[28]:
+
+
+os.chdir('G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据')
+fujian_1_5 = pd.read_csv("./1-5年数据.csv",engine = 'python')
+
+
+# In[53]:
+
+
+# 缺失超过阈值向量删除
+# 删除数据fujian_qc中特征数据缺失率超过40%的行和20%列
+def del_rows(fujian_1_5):
+    t = int(0.3*fujian_1_5.shape[1])
+    fujian_1_5 = fujian_1_5.dropna(thresh=t)#保留0.7非空的行
+    #data = data[(data.T != 0).any()]
+    t = int(0.8*fujian_1_5.shape[0])
+    data = fujian_1_5.dropna(thresh=t,axis=1)#保留0.2列
+    #data = data[(data.T != 0).any()]
+    return data
+fujian_1_5 =del_rows(fujian_1_5)
+# 设定阈值为80%
+# 删除行向量中缺失率超过80%列（股票特征）
+#fujian_1_5 = fujian_1_5.dropna(axis=1,thresh=1300, subset=None, inplace=False)
+fujian_1_5
+
+
+# ## 拉格朗日插值法
+
+# In[30]:
+
+
+# 自定义列向量缺失值拉格朗日插值函数
+def ploy(datMat, c):
+    for i in range(0, datMat.shape[1]):
+        for j in range(0, datMat.shape[0] - 6, 7):
+            num = []
+            for k in range(j, j + 7):
+                num.append(datMat.iloc[k, i])
+            s = np.array(num)
+            s1 = pd.Series(s, index=range(0, 7))
+            x = np.where(s1.notnull())[0]
+            x1 = np.where(s1.isnull())[0]
+            y = np.array(s1.iloc[x])
+            if s1.isnull().sum() <= c:
+                for m in x1:
+                    datMat.iloc[m+j, i] = lagrange(x, y)(m)
+            elif s1.isnull().sum() == 7:
+                meanVal = np.mean((datMat.iloc[:, i]).astype(float))
+                datMat.iloc[j:j + 7, i].fillna(meanVal, inplace=True)
+            else:
+                meanVal = np.mean((datMat.iloc[j:j+7, i]).astype(float))
+                datMat.iloc[j:j+7, i].fillna(meanVal, inplace=True)
+    return datMat
+# 自定义列向量异常值拉格朗日插值函数
+def zero(datMat, c):
+    for i in range(0, datMat.shape[1]):
+        for j in range(0, datMat.shape[0] - 6, 7):
+            num = []
+            for k in range(j, j + 7):
+                num.append(datMat.iloc[k, i])
+            s = np.array(num)
+            s1 = pd.Series(s, index=range(0, 7))
+            z = np.where(s1 != 0)[0]
+            z1 = np.where(s1 == 0)[0]
+            y = np.array(s1.iloc[z])
+            if (s1 == 0).sum() <= c:
+                for m in z1:
+                    datMat.iloc[m + j, i] = lagrange(z, y)(m)
+            elif (s1 == 0).sum() == 7:
+                meanVal = np.mean((datMat.iloc[:, i]).astype(float))
+                datMat.iloc[j:j + 7, i].fillna(meanVal, inplace=True)
+            else:
+                meanVal = np.mean((datMat.iloc[j:j + 7, i]).astype(float))
+                datMat.iloc[j:j + 7, i].fillna(meanVal, inplace=True)
+    return datMat
+def replaceNaNWithMean(datMat, m):  # 列缺失值占比判断函数
+    datMat_nan = pd.isna(datMat).sum() / datMat.shape[0]
+    list2 = datMat_nan.tolist()
+    list1 = datMat_nan.index.tolist()
+    for name, num in zip(list1, list2):
+        if num > m:
+            datMat.drop(columns=name, inplace=True)
+    return datMat
+
+
+# In[54]:
+
+
+data_factor1 = fujian_1_5
+a = data_factor1['所属行业']
+c = data_factor1['股票代码']
+d = data_factor1['是否在当年造假']
+data_factor1.drop(['所属行业', '是否在当年造假','股票代码'],  axis=1, inplace=True)
+replaceNaNWithMean(data_factor1, 0.2)  # 阈值为0.3
+zero(data_factor1, 2)  # 对0处理
+ploy(data_factor1, 2)  # 缺失数阈值为2 用拉格朗日插值,否则用均值
+data_factor1.insert(data_factor1.shape[1], '股票代码', c)
+data_factor1.insert(data_factor1.shape[1]-1, '所属行业', a)
+data_factor1.insert(data_factor1.shape[1]-1, '是否在当年造假', d)
+data_factor1.to_csv('1-5年朗格拉日插值数据.csv',encoding="gbk")
+data_factor1
+
+
+# ## 归一化处理
+
+# In[55]:
+
+
+# 通过Excel处理得到裸数据
+os.chdir('G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据')
+fujian_1_5luo = pd.read_csv("./1-5年luo数据.csv",header =None)
+for i in list(fujian_1_5luo.columns):
+   # 获取各个指标的最大值和最小值
+    Max = np.max(fujian_1_5luo[i])
+    Min = np.min(fujian_1_5luo[i])
+    fujian_1_5luo[i] = (fujian_1_5luo[i] - Min)/(Max - Min)
+fujian_1_5luo.to_csv('./1-5年luo数据归一化.csv')
+# Excel添加表头，完成数据归一化，作为训练集
+path = 'G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/第1-5年归一化数据.csv'
+f1 = open(path,encoding='gbk')
+fujian_g = pd.read_csv(f1)
+fujian_g = fujian_g.dropna()
+fujian_g
+
+
+# # 造假公司数据
+
+# In[56]:
+
+
+# 筛选造假公司的相关数据，即flag为1
+fujian_z = fujian_g[fujian_g['是否在当年造假'].isin(['1'])]
+# 导出数据
+fujian_z.to_csv('./造假公司数据.csv')
+fujian_z
+
+
+# # 特征指标筛选
+
+# In[34]:
+
+
+# 导包
+from itertools import chain
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+import matplotlib.pyplot as plt
+from sklearn.metrics import *
+from pylab import mpl
+from sklearn.feature_selection import RFECV
+
+
+# ## 导入数据
+
+# In[57]:
+
+
+data_standardization = fujian_z.iloc[:, :]
+b = data_standardization['所属行业']
+c = data_standardization['是否在当年造假']
+e = data_standardization['股票代码']
+data_standardization.drop(['所属行业','是否在当年造假','股票代码'], axis=1, inplace=True)
+# fujian_g['所属行业'] = fujian_g['所属行业'].astype(np.datetime64)
+data_standardization
+
+
+# ## 标准化数据
+
+# In[58]:
+
+
+# 可选择性标准化数据（本研究使用）
+data_mean = fujian_z.mean(axis=0)
+fujian_z_deviation = (((data_standardization - data_mean) ** 2).sum(axis=0) / (data_standardization.shape[0] - 1)) ** 0.5
+data_standardization = (fujian_z - data_mean) / fujian_z_deviation
+data_standardization.insert(data_standardization.shape[1], '是否在当年造假', c)
+data_standardization.insert(data_standardization.shape[1]-1, '所属行业', b)
+data_standardization.insert(0, '股票代码', e)
+fujian_z = data_standardization
+fujian_z
+
+
+# ## 过滤法
+
+# In[37]:
+
+
+# 可选择性使用（本研究未使用）
+def Filter(a, k):  # Filter过滤法
+    for i in a.columns[1:a.shape[1] - 2]:
+        variance_a = sum((a[i] - sum(a[i]) / len(a)) ** 2) / len(a)
+        if variance_a < k:
+            a.drop(i, axis=1, inplace=True)
+    return a
+Filter(fujian_z, 0.2)
+fujian_z.insert(fujian_g.shape[1], 'FLAG', c)
+# fujian_z.insert(fujian_z.shape[1] - 1, '所属行业',b) year
+fujian_z.insert(0, '股票代码', e)
+fujian_z
+
+
+# ## 造假股票行业分类
+
+# In[59]:
+
+
+# 行业分类
+index_zzy = []  # 属于制造业的公司的股票代码
+index_fzzy = []  # 属于非制造业的公司的股票代码
+for i in range(0, fujian_z.shape[0]):
+    if fujian_z.iloc[i, 84] == '制造业':
+        index_zzy.append(fujian_z.iat[i,0])
+    else:
+        index_fzzy.append(fujian_z.iat[i,0])
+
+index_zzy_weizi = []
+index_zzy = np.array(index_zzy)
+k = -1
+for i in index_zzy:
+    k += 1
+    index_zzy_weizi.append(k)
+index_zzy_weizi
+fujian_z_zzy = fujian_z.iloc[index_zzy_weizi, :]  # 制造业数据
+
+index_fzzy_weizi = []
+index_fzzy = np.array(index_fzzy)
+x = np.max(index_zzy_weizi) 
+for i in index_fzzy:
+    x += 1
+    index_fzzy_weizi.append(x)
+index_fzzy_weizi
+fujian_z_fzzy = fujian_z.iloc[index_fzzy_weizi, :]  # 非制造业数据
+
+
+
+fujian_z_fzzy_num = np.array(fujian_z_fzzy.iloc[:, 1:-1])  # 非制造业的数据
+fujian_z_fzzy_target = np.array(fujian_z_fzzy.iloc[:, -1])  # 非制造业的分类
+fujian_z_zzy_num = np.array(fujian_z_zzy.iloc[:, 1:-1])  # 制造业的数据
+fujian_z_zzy_target = np.array(fujian_z_zzy.iloc[:, -1])  # 制造业的分类
+
+
+# ## 特征因子选择
+
+# In[41]:
+
+
+'''制造业造假热图'''
+
+
+# In[60]:
+
+
+# 提取表头
+a = np.array(fujian_z.columns.values.tolist())
+a = a[~np.isin(a,['是否在当年造假'])]
+a = a[~np.isin(a,['股票代码'])]
+a
+
+
+# In[61]:
+
+
+# 数据处理
+fujian_z_zzy_num = pd.DataFrame(fujian_z_zzy_num, columns=a)
+fujian_z_zzy_num = fujian_z_zzy_num.drop(['所属行业'], axis=1)
+fujian_z_zzy_num.to_csv('./附件_制造业造假.csv')
+fujian_z_zzy_num
+
+
+# In[219]:
+
+
+# 造假制造业热图
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False   # 作图显示中文
+
+def HeatMap(fujian_z_zzy_num, A):  # 热图
+    plt.subplots(figsize=(15, 15))
+    xlables = A.columns
+    ylables = A.columns
+    sns.heatmap(fujian_z_zzy_num, xticklabels=xlables, yticklabels=ylables,
+                annot=False, vmax=1, square=True, cmap="YlGnBu")
+    plt.savefig('./图片/造假制造业热图.jpg')
+    plt.show()
+
+path = 'G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/附件_制造业造假.csv'
+fp = open(path,encoding='utf-8')
+data = pd.read_csv(fp)
+#e = data['股票代码']
+#data.drop(['所属行业'], axis=1, inplace=True)
+#data.drop(['股票代码'], axis=1, inplace=True)
+# data.drop(['Unnamed: 0'], axis=1, inplace=True)
+
+corr_data = abs(np.corrcoef(data, rowvar=False))  # 相关系数矩阵
+HeatMap(corr_data, data)  # 相关系数热图
+corr_data_1 = pd.DataFrame(index=data.columns[0:data.shape[1] - 1],
+                           data=corr_data[-1, :-1].reshape([data.shape[1] - 1, 1]))
+corr_data_1 = corr_data_1.sort_values(axis=0, ascending=False, by=0)  # 因子与造假的相关系数排序表
+corr_data_1.to_csv('制造业的因子数排序表.csv', encoding='gbk')
+corr_data_1
+
+
+# In[45]:
+
+
+'''非制造业造假热图'''
+
+
+# In[63]:
+
+
+fujian_z_fzzy_num = pd.DataFrame(fujian_z_fzzy_num, columns=a)
+fujian_z_fzzy_num = fujian_z_fzzy_num.drop(['所属行业'], axis=1)
+fujian_z_zzy_num.to_csv('./附件_非制造业造假.csv')
+fujian_z_fzzy_num
+
+
+# In[220]:
+
+
+# 造假非制造业热图
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False   # 作图显示中文
+
+def HeatMap(fujian_z_fzzy_num, A):  # 热图
+    plt.subplots(figsize=(15, 15))
+    xlables = A.columns
+    ylables = A.columns
+    sns.heatmap(fujian_z_fzzy_num, xticklabels=xlables, yticklabels=ylables,
+                annot=False, vmax=1, square=True, cmap="YlGnBu")
+    plt.savefig('./图片/造假非制造业热图.jpg')
+    plt.show()
+
+path = 'G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/附件_非制造业造假.csv'
+fp = open(path,encoding='UTF-8')
+data = pd.read_csv(fp)
+#e = data['股票代码']
+#data.drop(['所属行业'], axis=1, inplace=True)
+#data.drop(['股票代码'], axis=1, inplace=True)
+# data.drop(['Unnamed: 0'], axis=1, inplace=True)
+
+corr_data1 = abs(np.corrcoef(data, rowvar=False))  # 相关系数矩阵
+HeatMap(corr_data1, data)  # 相关系数热图
+corr_data_2 = pd.DataFrame(index=data.columns[0:data.shape[1] - 1],
+                           data=corr_data1[-1, :-1].reshape([data.shape[1] - 1, 1]))
+corr_data_2 = corr_data_2.sort_values(axis=0, ascending=False, by=0)  # 因子与造假的相关系数排序表
+corr_data_2.to_csv('非制造业的因子排序表.csv', encoding='gbk')
+corr_data_2
+
+
+# In[48]:
+
+
+'''所有行业造假热图'''
+
+
+# In[65]:
+
+
+# 所有业热图
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False   # 作图显示中文
+
+def HeatMap(fujian_z, A):  # 热图
+    plt.subplots(figsize=(15, 15))
+    xlables = A.columns
+    ylables = A.columns
+    sns.heatmap(fujian_z, xticklabels=xlables, yticklabels=ylables,
+                annot=False, vmax=1, square=True, cmap="YlGnBu")
+    plt.savefig('./图片/所有行业热图.jpg')
+    plt.show()
+
+# path = 'G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/造假公司数据.csv'
+# fp = open(path,encoding='UTF-8')
+# data = pd.read_csv(fp)
+#e = data['股票代码']
+#data.drop(['所属行业'], axis=1, inplace=True)
+#data.drop(['股票代码'], axis=1, inplace=True)
+# data.drop(['Unnamed: 0'], axis=1, inplace=True)
+fujian_z.drop(['所属行业','是否在当年造假'], axis=1, inplace=True)
+corr_data2 = abs(np.corrcoef(fujian_z, rowvar=False))  # 相关系数矩阵
+HeatMap(corr_data2, fujian_z)  # 相关系数热图
+corr_data_3 = pd.DataFrame(index=fujian_z.columns[0:fujian_z.shape[1] - 1],
+                           fujian_z=corr_data2[-1, :-1].reshape([fujian_z.shape[1] - 1, 1]))
+corr_data_3 = corr_data_3.sort_values(axis=0, ascending=False, by=0)  # 因子与造假的相关系数排序表
+corr_data_3.to_csv('所有的因子排序表.csv', encoding='UTF-8')
+corr_data_3
+
+
+# # 模型搭建及模型评价
+
+# ## 数据准备
+
+# In[66]:
+
+
+from itertools import chain
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import *
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import roc_curve, auc
+from sklearn.linear_model import LogisticRegression
+
+
+# In[67]:
+
+
+def train_test(datMat, datMat_1):
+    train_x = []
+    train_y = []
+    test_x = []
+    test_y = []
+    for i in range(0, datMat.shape[0], 6):
+        train_x.append(datMat[i:i + 5])
+        test_x.append(datMat[i + 5])
+    for i in range(0, datMat_1.shape[0], 6):
+        train_y.append(datMat_1[i:i + 5])
+        test_y.append(datMat_1[i + 5])
+    train_x = np.reshape(np.array(train_x), (-1, datMat.shape[1]))
+    train_y = np.array(train_y).flatten()
+    test_y = np.array(test_y).flatten()
+    test_x = np.reshape(np.array(test_x), (-1, datMat.shape[1]))
+    return train_x, test_x, train_y, test_y
+
+
+# In[68]:
+
+
+# 导入数据
+train = fujian_g
+data_standardization = train.iloc[:, :]
+b = train['所属行业']
+c = train['是否在当年造假']
+e = train['股票代码']
+train.drop(['所属行业','是否在当年造假','股票代码'], axis=1, inplace=True)
+
+# 已归一化，无需标准化
+# 标准差标准化
+# data_mean = data_standardization.mean(axis=0)
+# data_standard_deviation = (((data_factor-data_mean)**2).sum(axis=0)/(data_factor.shape[0]-1))**0.5
+# data_factor = (data_standardization - data_mean) / data_standard_deviation
+
+train.insert(train.shape[1], '是否在当年造假', c)
+train.insert(train.shape[1] - 1, '所属行业', b)
+train.insert(0, '股票代码', e)
+
+
+# In[69]:
+
+
+# 行业分类
+index_zzy = []  # 属于制造业的公司的股票代码
+index_fzzy = []  # 属于非制造业的公司的股票代码
+for i in range(0, train.shape[0]):
+    if train.iloc[i, 84] == '制造业':
+        index_zzy.append(train.iat[i,0])
+    else:
+        index_fzzy.append(train.iat[i,0])
+
+index_zzy_weizi = []
+index_zzy = np.array(index_zzy)
+k = -1
+for i in index_zzy:
+    k += 1
+    index_zzy_weizi.append(k)
+index_zzy_weizi
+train_zzy = train.iloc[index_zzy_weizi, :]  # 制造业数据
+
+index_fzzy_weizi = []
+index_fzzy = np.array(index_fzzy)
+x = np.max(index_zzy_weizi) 
+for i in index_fzzy:
+    x += 1
+    index_fzzy_weizi.append(x)
+index_fzzy_weizi
+train_fzzy = train.iloc[index_fzzy_weizi, :]  # 非制造业数据
+
+train_fzzy_num = np.array(train_fzzy.iloc[:, 1:-1])  # 非制造业的数据
+train_fzzy_num = np.delete(train_fzzy_num, -1, axis=1)
+train_fzzy_target = np.array(train_fzzy.iloc[:, -1])  # 非制造业的分类
+train_zzy_num = np.array(train_zzy.iloc[:, 1:-1])  # 制造业的数据
+train_zzy_num = np.delete(train_zzy_num, -1, axis=1)
+train_zzy_target = np.array(train_zzy.iloc[:, -1])  # 制造业的分类
+
+
+# In[70]:
+
+
+'''数据集划分'''
+# 制造业数据集划分
+zzy_train_x, zzy_test_x, zzy_train_y, zzy_test_y = train_test_split(train_zzy_num, train_zzy_target, test_size=0.4)
+# 非制造业数据计划分
+fzzy_train_x, fzzy_test_x, fzzy_train_y, fzzy_test_y = train_test_split(train_fzzy_num, train_fzzy_target, test_size=0.4)
+
+
+# ## 逻辑回归模型
+
+# In[71]:
+
+
+'''模型模型构建'''
+# 制造业模型
+model_zzy = LogisticRegression(penalty='l1', C=1, solver='liblinear',class_weight='balanced')
+model_zzy.fit(zzy_train_x,zzy_train_y)  # 模型训练
+zzy_pre_y = model_zzy.predict(zzy_test_x)  # 模型预测
+'''模型评估'''
+res = classification_report(zzy_test_y, zzy_pre_y)  # 评估报告
+c = confusion_matrix(zzy_test_y, zzy_pre_y)  # 混淆矩阵
+fpr, tpr, threshold = roc_curve(zzy_test_y, zzy_pre_y)
+L_roc_auc = auc(fpr, tpr)
+a = sum(zzy_test_y == zzy_pre_y) / len(zzy_pre_y)
+print("混淆矩阵：\n",c)
+print("评估报告（precision:精确度,recall:召回率,f1-score:F1系数）：\n",res)
+print("准确率：",a)
+print("AUC：",L_roc_auc)
+
+
+# In[ ]:
+
+
+# 非制造业模型
+model_fzzy = LogisticRegression(penalty='l1', C=1e5, solver='liblinear',class_weight='balanced', max_iter=10000)
+model_fzzy.fit(fzzy_train_x, fzzy_train_y)  # 模型训练
+fzzy_pre_y = model_fzzy.predict(fzzy_test_x)  # 模型预测
+
+'''模型评估'''
+res1 = classification_report(fzzy_test_y, fzzy_pre_y)  # 评估报告
+c1 = confusion_matrix(fzzy_test_y, fzzy_pre_y)  # 混淆矩阵
+fpr1, tpr1, threshold1 = roc_curve(fzzy_test_y, fzzy_pre_y)
+L_roc_auc1 = auc(fpr1, tpr1)
+a1 = sum(fzzy_test_y == fzzy_pre_y) / len(fzzy_pre_y)
+print("混淆矩阵：\n",c1)
+print("评估报告（precision:精确度,recall:召回率,f1-score:F1系数）：\n",res1)
+print("准确率：",a1)
+print("AUC：",L_roc_auc1)
+
+
+# In[72]:
+
+
+lw = 2
+plt.figure(figsize=(10, 10))
+plt.plot(fpr, tpr, color='darkorange',lw=lw, label='ROC curve (area = %0.2f)' % L_roc_auc)  # 假正率为横坐标，真正率为纵坐标做曲线
+plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate(假正类率)')
+plt.ylabel('True Positive Rate(真正类率)')
+plt.title('Receiver Operating Characteristic(L-ROC)')
+plt.legend(loc="lower right")
+plt.savefig('L-ROC曲线图.jpg')
+plt.show()
+
+
+# ## 决策树模型
+
+# In[73]:
+
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.feature_selection import RFECV
+from sklearn.model_selection import StratifiedKFold
+
+
+# In[74]:
+
+
+'''模型模型构建'''
+# 制造业模型
+model_zzy = DecisionTreeClassifier(criterion='gini', max_depth=5, class_weight='balanced')  # 逻辑回归模型构建
+model_zzy.fit(zzy_train_x,zzy_train_y)  # 模型训练
+zzy_pre_y = model_zzy.predict(zzy_test_x)  # 模型预测
+'''模型评估'''
+res = classification_report(zzy_test_y, zzy_pre_y)  # 评估报告
+c = confusion_matrix(zzy_test_y, zzy_pre_y)  # 混淆矩阵
+fpr, tpr, threshold = roc_curve(zzy_test_y, zzy_pre_y)
+J_roc_auc = auc(fpr, tpr)
+a = sum(zzy_test_y == zzy_pre_y) / len(zzy_pre_y)
+print("混淆矩阵：\n",c)
+print("评估报告（precision:精确度,recall:召回率,f1-score:F1系数）：\n",res)
+print("准确率：",a)
+print("AUC：",J_roc_auc)
+
+
+# In[ ]:
+
+
+# 非制造业模型
+model_fzzy = DecisionTreeClassifier(criterion='gini', max_depth=5, class_weight='balanced')  # 逻辑回归模型构建
+model_fzzy.fit(fzzy_train_x, fzzy_train_y)  # 模型训练
+fzzy_pre_y = model_fzzy.predict(fzzy_test_x)  # 模型预测
+'''模型评估'''
+res1 = classification_report(fzzy_test_y, fzzy_pre_y)  # 评估报告
+c1 = confusion_matrix(fzzy_test_y, fzzy_pre_y)  # 混淆矩阵
+fpr1, tpr1, threshold1 = roc_curve(fzzy_test_y, fzzy_pre_y)
+J_roc_auc1 = auc(fpr1, tpr1)
+a1 = sum(fzzy_test_y == fzzy_pre_y) / len(fzzy_pre_y)
+print("混淆矩阵：\n",c1)
+print("评估报告（precision:精确度,recall:召回率,f1-score:F1系数）：\n",res1)
+print("准确率：",a1)
+print("AUC：",J_roc_auc1)
+
+
+# In[75]:
+
+
+lw = 2
+plt.figure(figsize=(10, 10))
+plt.plot(fpr, tpr, color='darkorange',lw=lw, label='ROC curve (area = %0.2f)' % J_roc_auc)  # 假正率为横坐标，真正率为纵坐标做曲线
+plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate(假正类率)')
+plt.ylabel('True Positive Rate(真正类率)')
+plt.title('Receiver Operating Characteristic(J-ROC)')
+plt.legend(loc="lower right")
+plt.savefig('J-ROC曲线图.jpg')
+plt.show()
+
+
+# ## 支持向量机模型
+
+# In[76]:
+
+
+from itertools import chain
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import RFE
+from sklearn.metrics import confusion_matrix
+
+
+# In[80]:
+
+
+'''模型模型构建'''
+# 制造业建模
+model_zzy = SVC(kernel='linear', C=1, class_weight='balanced')
+model_zzy.fit(zzy_train_x, zzy_train_y)  # 模型训练
+zzy_pre_y = model_zzy.predict(zzy_test_x)  # 模型预测
+'''模型评估'''
+res = classification_report(zzy_test_y, zzy_pre_y)  # 评估报告
+c = confusion_matrix(zzy_test_y, zzy_pre_y)  # 混淆矩阵
+fpr, tpr, threshold = roc_curve(zzy_test_y, zzy_pre_y)
+Z_roc_auc = auc(fpr, tpr)
+a = sum(zzy_test_y == zzy_pre_y) / len(zzy_pre_y)
+print("混淆矩阵：\n",c)
+print("评估报告（precision:精确度,recall:召回率,f1-score:F1系数）：\n",res)
+print("准确率：",a)
+print("AUC：",Z_roc_auc)
+
+
+# In[ ]:
+
+
+# 非制造业建模
+model_fzzy = SVC(kernel='linear', C=100, class_weight='balanced')
+model_fzzy.fit(fzzy_train_x, fzzy_train_y)  # 模型训练
+fzzy_pre_y = model_fzzy.predict(fzzy_test_x)  # 模型预测
+'''模型评估'''
+res1 = classification_report(fzzy_test_y, fzzy_pre_y)  # 评估报告
+c1 = confusion_matrix(fzzy_test_y, fzzy_pre_y)  # 混淆矩阵
+fpr1, tpr1, threshold1 = roc_curve(fzzy_test_y, fzzy_pre_y)
+Z_roc_auc1 = auc(fpr1, tpr1)
+a1 = sum(fzzy_test_y == fzzy_pre_y) / len(fzzy_pre_y)
+print("混淆矩阵：\n",c1)
+print("评估报告（precision:精确度,recall:召回率,f1-score:F1系数）：\n",res1)
+print("准确率：",a1)
+print("AUC：",Z_roc_auc1)
+
+
+# In[79]:
+
+
+lw = 2
+plt.figure(figsize=(10, 10))
+plt.plot(fpr, tpr, color='darkorange',lw=lw, label='ROC curve (area = %0.2f)' % Z_roc_auc)  # 假正率为横坐标，真正率为纵坐标做曲线
+plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate(假正类率)')
+plt.ylabel('True Positive Rate(真正类率)')
+plt.title('Receiver Operating Characteristic(Z-ROC)')
+plt.legend(loc="lower right")
+plt.savefig('Z-ROC曲线图.jpg')
+plt.show()
+
+
+# ## GBDT算法模型
+
+# In[81]:
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingClassifier
+import joblib
+
+
+# In[83]:
+
+
+def train_test(datMat, datMat_1):
+    train_x = []
+    train_y = []
+    test_x = []
+    test_y = []
+    for i in range(0, datMat.shape[0], 6):
+        train_x.append(datMat[i:i + 5])
+        test_x.append(datMat[i + 5])
+    for i in range(0, datMat_1.shape[0], 6):
+        train_y.append(datMat_1[i:i + 5])
+        test_y.append(datMat_1[i + 5])
+    train_x = np.reshape(np.array(train_x), (-1, datMat.shape[1]))
+    train_y = np.array(train_y).flatten()
+    test_y = np.array(test_y).flatten()
+    test_x = np.reshape(np.array(test_x), (-1, datMat.shape[1]))
+    return train_x, test_x, train_y, test_y
+# 导入数据
+data_standardization = fujian_g.iloc[:, :]
+b = fujian_g['所属行业']
+c = fujian_g['是否在当年造假']
+e = fujian_g['股票代码']
+fujian_g.drop(['所属行业','是否在当年造假','股票代码'], axis=1, inplace=True)
+fujian_g.insert(fujian_g.shape[1], '是否在当年造假', c)
+fujian_g.insert(fujian_g.shape[1] - 1, '所属行业', b)
+fujian_g.insert(0, '股票代码', e)
+fujian_g.dropna(inplace=True)
+# 行业分类
+index_zzy = []  # 属于制造业的公司的股票代码
+index_fzzy = []  # 属于非制造业的公司的股票代码
+for i in range(0, fujian_g.shape[0]):
+    if fujian_g.iloc[i, 84] == '制造业':
+        index_zzy.append(fujian_g.iat[i,0])
+    else:
+        index_fzzy.append(fujian_g.iat[i,0])
+
+index_zzy_weizi = []
+index_zzy = np.array(index_zzy)
+k = -1
+for i in index_zzy:
+    k += 1
+    index_zzy_weizi.append(k)
+index_zzy_weizi
+fujian_g_zzy = fujian_g.iloc[index_zzy_weizi, :]  # 制造业数据
+
+fujian_g_zzy_num = np.array(fujian_g_zzy.iloc[:, 1:-1])  # 制造业的数据
+fujian_g_zzy_target = np.array(fujian_g_zzy.iloc[:, -1])  # 制造业的分类
+# 去除string类型
+fujian_g_zzy_num = np.delete(fujian_g_zzy_num, -1, axis=1)
+
+
+# In[84]:
+
+
+fujian_zzy = fujian_g[fujian_g['所属行业'].isin(['制造业'])]
+# 数据集划分
+zzy_train_xj, zzy_test_xj, zzy_train_yj, zzy_test_yj = train_test_split(fujian_g_zzy, fujian_g_zzy_target, test_size=0.4)
+# 制造业数据集划
+zzy_train_x, zzy_test_x, zzy_train_y, zzy_test_y = train_test_split(fujian_g_zzy_num, fujian_g_zzy_target, test_size=0.4)
+
+
+# In[88]:
+
+
+# 模型准确率
+gbr = GradientBoostingClassifier(n_estimators=3000, max_depth=2, min_samples_split=2, learning_rate=0.1)
+gbr.fit(zzy_train_x, zzy_train_y.ravel())
+joblib.dump(gbr, 'zzy_train.m')
+gbr = joblib.load('zzy_train.m') # 加载模型
+train_k = gbr.predict(zzy_train_x)
+train_k = np.reshape(train_k,(1953, 1))
+y_gbr = gbr.predict(zzy_train_x)
+y_gbr1 = gbr.predict(zzy_test_x)
+acc_train = gbr.score(zzy_train_x, zzy_train_y)
+acc_test = gbr.score(zzy_test_x, zzy_test_y)
+print("训练集准确率：",acc_train)
+print("测试集准确率：",acc_test)
+
+
+# In[91]:
+
+
+'''模型评估'''
+res = classification_report(zzy_test_y, y_gbr1)  # 评估报告
+c = confusion_matrix(zzy_test_y, y_gbr1)  # 混淆矩阵
+fpr, tpr, threshold = roc_curve(zzy_test_y, y_gbr1)
+G_roc_auc = auc(fpr, tpr)
+a = sum(zzy_test_y == y_gbr1) / len(y_gbr1)
+print("混淆矩阵：\n",c)
+print("评估报告（precision:精确度,recall:召回率,f1-score:F1系数）：\n",res)
+print("准确率：",a)
+print("AUC：",G_roc_auc)
+
+
+# In[92]:
+
+
+lw = 2
+plt.figure(figsize=(10, 10))
+plt.plot(fpr, tpr, color='darkorange',lw=lw, label='ROC curve (area = %0.2f)' % G_roc_auc)  # 假正率为横坐标，真正率为纵坐标做曲线
+plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate(假正类率)')
+plt.ylabel('True Positive Rate(真正类率)')
+plt.title('Receiver Operating Characteristic(G-ROC)')
+plt.legend(loc="lower right")
+plt.savefig('G-ROC曲线图.jpg')
+plt.show()
+
+
+# # 模型选择——决策树
+
+# ## 主成分分析
+
+# In[ ]:
+
+
+#制造业主成分分析
+m = fujian_g_zzy_num.shape[1]  # 参数可调
+res_table = np.zeros([8, m-2])
+pca = PCA(n_components=m)  # 降到m维
+pca.fit(fujian_g_zzy_num)  # 训练
+fujian_g_zzy_num_pca = pca.fit_transform(fujian_g_zzy_num)  # 降维后的制造业数据
+print(pca.explained_variance_ratio_)#单个
+# 非制造业主成分分析
+m = fujian_g_fzzy_num.shape[1]  # 参数可调
+res_table = np.zeros([8, m-2])
+pca = PCA(n_components=m)  # 降到m维
+pca.fit(fujian_g_fzzy_num)  # 训练
+fujian_g_fzzy_num_pca = pca.fit_transform(fujian_g_fzzy_num)  # 降维后的制造业数据
+print(pca.explained_variance_ratio_)#单个
+
+
+# ## 递归特征选择
+
+# In[ ]:
+
+
+import pandas as pd
+import numpy as np
+from itertools import chain
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+import matplotlib.pyplot as plt
+from sklearn.metrics import *
+from pylab import mpl
+from sklearn.feature_selection import RFECV
+
+
+# In[ ]:
+
+
+# 导入数据
+path = 'G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/附件_归一化.csv'
+m = open(path,encoding='gbk')
+fujian_g = pd.read_csv(m)
+
+path = 'G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/附件_归一化.csv'
+m = open(path,encoding='gbk')
+fujian_g = pd.read_csv(m)
+
+data_standardization = fujian_g.iloc[:, :]
+b = fujian_g['所属行业']
+c = fujian_g['FLAG']
+e = fujian_g['股票代码']
+fujian_g.drop(['所属行业','FLAG','股票代码'], axis=1, inplace=True)
+# fujian_g['所属行业'] = fujian_g['所属行业'].astype(np.datetime64)
+
+
+# In[ ]:
+
+
+fujian_g.dropna(inplace=True)
+fujian_g
+
+
+# In[ ]:
+
+
+# 标准差标准化
+# data_mean = data_standardization.mean(axis=0)
+# data_standard_deviation = (((fujian_g - data_mean) ** 2).sum(axis=0) / (fujian_g.shape[0] - 1)) ** 0.5
+# fujian_g = (data_standardization - data_mean) / data_standard_deviation
+# 去除string类型的数据
+fujian_g.insert(fujian_g.shape[1], 'FLAG', c)
+fujian_g.insert(fujian_g.shape[1]-1, '所属行业', b)
+fujian_g.insert(0, '股票代码', e)
+
+fujian_g
+
+
+# In[ ]:
+
+
+# 行业分类
+index_zzy = []  # 属于制造业的公司的股票代码
+index_fzzy = []  # 属于非制造业的公司的股票代码
+for i in range(1, fujian_g.shape[0]):
+    if fujian_g.iloc[i, 218] == '制造业':
+        index_zzy.append(fujian_g['股票代码'][i])
+    else:
+        index_fzzy.append(fujian_g['股票代码'][i])
+
+index_fzzy_weizi = []
+for j in index_fzzy:
+    a = fujian_g[fujian_g.股票代码 == j].index.tolist()
+    index_fzzy_weizi.append(a)
+index_fzzy_weizi = np.array(index_fzzy_weizi)
+index_fzzy_weizi = np.array(list(chain.from_iterable(index_fzzy_weizi)))
+fujian_g_fzzy = fujian_g.iloc[index_fzzy_weizi, :]  # 非制造业数据
+
+index_zzy_weizi = []
+for j in index_zzy:
+    a = fujian_g[fujian_g.股票代码 == j].index.tolist()
+    index_zzy_weizi.append(a)
+index_zzy_weizi = np.array(index_zzy_weizi)
+index_zzy_weizi = np.array(list(chain.from_iterable(index_zzy_weizi)))
+fujian_g_zzy = fujian_g.iloc[index_zzy_weizi, :]  # 制造业数据
+fujian_g_fzzy_num = np.array(fujian_g_fzzy.iloc[:, 1:-1])  # 非制造业的数据
+fujian_g_fzzy_target = np.array(fujian_g_fzzy.iloc[:, -1])  # 非制造业的分类
+fujian_g_zzy_num = np.array(fujian_g_zzy.iloc[:, 1:-1])  # 制造业的数据
+fujian_g_zzy_target = np.array(fujian_g_zzy.iloc[:, -1])  # 制造业的分类
+
+m = fujian_g_fzzy_num.shape[1]  # 参数可调
+res_table = np.zeros([3, m-2])
+
+# fujian_g_zzy_num[pd.isna(fujian_g_zzy_num)] = 0
+# fujian_g_zzy_num = pd.DataFrame(fujian_g_zzy_num)
+# print(fujian_g_zzy_num.info())
+
+
+# In[ ]:
+
+
+fujian_g_zzy_num = np.delete(fujian_g_zzy_num, -1, axis=1)
+fujian_g_zzy_num
+
+
+# In[ ]:
+
+
+fujian_g_fzzy_num = np.delete(fujian_g_fzzy_num, -1, axis=1)
+fujian_g_fzzy_num
+
+
+# In[ ]:
+
+
+import pandas as pd
+import numpy as np
+from itertools import chain
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+import matplotlib.pyplot as plt
+from sklearn.metrics import *
+from pylab import mpl
+from sklearn.feature_selection import RFECV
+'''数据集划分'''
+# 制造业数据集划分
+zzy_train_x, zzy_test_x, zzy_train_y, zzy_test_y = train_test_split(fujian_g_zzy_num, fujian_g_zzy_target, test_size=0.2)
+for n in range(2, m):
+    roc_auc1 = 0
+    roc_auc2 = 0
+    roc_auc3 = 0
+    for j in range(0, 10):
+        # 逻辑回归
+        model_1 = LogisticRegression(penalty='l1', C=1, solver='liblinear', class_weight='balanced')
+        rfe1 = RFECV(model_1, n, n_jobs=-1, cv=2)
+        rfe1 = rfe1.fit(fujian_g_zzy_num, fujian_g_zzy_target)
+        model_1 = rfe1.estimator_
+        model_1.fit(zzy_train_x, zzy_train_y)
+        zzy_pre_1 = model_1.predict(zzy_test_x)
+        fpr1, tpr1, threshold1 = roc_curve(zzy_test_y, zzy_pre_1)
+        roc_auc1 += auc(fpr1, tpr1)
+        # 决策树
+        model_2 = DecisionTreeClassifier(criterion='gini',
+                                         max_depth=10, class_weight='balanced')  # 逻辑回归模型构建
+        rfe2 = RFECV(model_2, n, n_jobs=-1, cv=2)
+        rfe2 = rfe2.fit(fujian_g_zzy_num, fujian_g_zzy_target)
+        model_2 = rfe2.estimator_
+        model_2.fit(zzy_train_x, zzy_train_y)  # 模型训练
+        zzy_pre_2 = model_2.predict(zzy_test_x)  # 模型预测
+        fpr2, tpr2, threshold2 = roc_curve(zzy_test_y, zzy_pre_2)
+        roc_auc2 += auc(fpr2, tpr2)
+        # 支持向量机
+        model_3 = SVC(C=1.0, kernel='linear', class_weight='balanced')  # 逻辑回归模型构建
+        rfe3 = RFECV(model_3, n, n_jobs=-1, cv=2)
+        rfe3 = rfe3.fit(fujian_g_zzy_num, fujian_g_zzy_target)
+        model_3 = rfe3.estimator_
+        model_3.fit(zzy_train_x, zzy_train_y)  # 模型训练
+        zzy_pre_3 = model_3.predict(zzy_test_x)  # 模型预测
+        fpr3, tpr3, threshold3 = roc_curve(zzy_test_y, zzy_pre_3)
+        roc_auc3 += auc(fpr3, tpr3)
+    res_table[0, n-2] = roc_auc1/10
+    res_table[1, n-2] = roc_auc2/10
+    res_table[2, n-2] = roc_auc3/10
+
+mpl.rcParams['font.sans-serif'] = ['SimHei']  # 作图显示中文
+mpl.rcParams['axes.unicode_minus'] = False
+
+plt.plot(range(2, m), res_table[0, :], label='LR')
+plt.plot(range(2, m), res_table[1, :], label='DC')
+plt.plot(range(2, m), res_table[2, :], label='SVC')
+plt.legend()
+plt.xlabel = '特征数量'
+plt.ylabel = 'auc'
+plt.title = '特征数量-auc'
+# plt.savefig('特征数量-auc.jpg', dpi=500)
+plt.show()
+
+
+# In[ ]:
+
+
+import pandas as pd
+import numpy as np
+from itertools import chain
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+import matplotlib.pyplot as plt
+from sklearn.metrics import *
+from pylab import mpl
+from sklearn.feature_selection import RFECV
+'''数据集划分'''
+# 非制造业数据集划分
+fzzy_train_x, fzzy_test_x, fzzy_train_y, fzzy_test_y = train_test_split(fujian_g_fzzy_num, fujian_g_fzzy_target, test_size=0.2)
+for n in range(2, m):
+    roc_auc1 = 0
+    roc_auc2 = 0
+    roc_auc3 = 0
+    for j in range(0, 10):
+        # 逻辑回归
+        model_1 = LogisticRegression(penalty='l1', C=1, solver='liblinear', class_weight='balanced')
+        rfe1 = RFECV(model_1, n, n_jobs=-1, cv=2)
+        rfe1 = rfe1.fit(fujian_g_fzzy_num, fujian_g_fzzy_target)
+        model_1 = rfe1.estimator_
+        model_1.fit(fzzy_train_x, fzzy_train_y)
+        fzzy_pre_1 = model_1.predict(fzzy_test_x)
+        fpr1, tpr1, threshold1 = roc_curve(fzzy_test_y, fzzy_pre_1)
+        roc_auc1 += auc(fpr1, tpr1)
+        # 决策树
+        model_2 = DecisionTreeClassifier(criterion='gini',
+                                         max_depth=10, class_weight='balanced')  # 逻辑回归模型构建
+        rfe2 = RFECV(model_2, n, n_jobs=-1, cv=2)
+        rfe2 = rfe2.fit(fujian_g_fzzy_num, fujian_g_fzzy_target)
+        model_2 = rfe2.estimator_
+        model_2.fit(fzzy_train_x, fzzy_train_y)  # 模型训练
+        fzzy_pre_2 = model_2.predict(fzzy_test_x)  # 模型预测
+        fpr2, tpr2, threshold2 = roc_curve(fzzy_test_y, fzzy_pre_2)
+        roc_auc2 += auc(fpr2, tpr2)
+        # 支持向量机
+        model_3 = SVC(C=1.0, kernel='linear', class_weight='balanced')  # 逻辑回归模型构建
+        rfe3 = RFECV(model_3, n, n_jobs=-1, cv=2)
+        rfe3 = rfe3.fit(fujian_g_fzzy_num, fujian_g_fzzy_target)
+        model_3 = rfe3.estimator_
+        model_3.fit(fzzy_train_x, fzzy_train_y)  # 模型训练
+        fzzy_pre_3 = model_3.predict(fzzy_test_x)  # 模型预测
+        fpr3, tpr3, threshold3 = roc_curve(fzzy_test_y, fzzy_pre_3)
+        roc_auc3 += auc(fpr3, tpr3)
+    res_table[0, n-2] = roc_auc1/10
+    res_table[1, n-2] = roc_auc2/10
+    res_table[2, n-2] = roc_auc3/10
+
+mpl.rcParams['font.sans-serif'] = ['SimHei']  # 作图显示中文
+mpl.rcParams['axes.unicode_minus'] = False
+
+plt.plot(range(2, m), res_table[0, :], label='LR')
+plt.plot(range(2, m), res_table[1, :], label='DC')
+plt.plot(range(2, m), res_table[2, :], label='SVC')
+plt.legend()
+plt.xlabel = '特征数量'
+plt.ylabel = 'auc'
+plt.title = '特征数量-auc'
+plt.savefig('非制造业特征数量-auc.jpg', dpi=500)
+plt.show()
+
+
+# # 决策树预测第六年造假
+
+# In[146]:
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingClassifier
+import joblib
+
+
+# ## 制造业造假预测
+
+# In[96]:
+
+
+def train_test(datMat, datMat_1):
+    train_x = []
+    train_y = []
+    test_x = []
+    test_y = []
+    for i in range(0, datMat.shape[0], 6):
+        train_x.append(datMat[i:i + 5])
+        test_x.append(datMat[i + 5])
+    for i in range(0, datMat_1.shape[0], 6):
+        train_y.append(datMat_1[i:i + 5])
+        test_y.append(datMat_1[i + 5])
+    train_x = np.reshape(np.array(train_x), (-1, datMat.shape[1]))
+    train_y = np.array(train_y).flatten()
+    test_y = np.array(test_y).flatten()
+    test_x = np.reshape(np.array(test_x), (-1, datMat.shape[1]))
+    return train_x, test_x, train_y, test_y
+# 导入数据
+
+data_standardization = fujian_g.iloc[:, :]
+b = fujian_g['所属行业']
+c = fujian_g['是否在当年造假']
+e = fujian_g['股票代码']
+fujian_g.drop(['所属行业','是否在当年造假','股票代码'], axis=1, inplace=True)
+fujian_g.insert(fujian_g.shape[1], '是否在当年该造假', c)
+fujian_g.insert(fujian_g.shape[1] - 1, '所属行业', b)
+fujian_g.insert(0, '股票代码', e)
+fujian_g.dropna(inplace=True)
+# 行业分类
+index_zzy = []  # 属于制造业的公司的股票代码
+index_fzzy = []  # 属于非制造业的公司的股票代码
+for i in range(0, fujian_g.shape[0]):
+    if fujian_g.iloc[i, 84] == '制造业':
+        index_zzy.append(fujian_g.iat[i,0])
+    else:
+        index_fzzy.append(fujian_g.iat[i,0])
+
+index_zzy_weizi = []
+index_zzy = np.array(index_zzy)
+k = -1
+for i in index_zzy:
+    k += 1
+    index_zzy_weizi.append(k)
+index_zzy_weizi
+fujian_g_zzy = fujian_g.iloc[index_zzy_weizi, :]  # 制造业数据
+
+fujian_g_zzy_num = np.array(fujian_g_zzy.iloc[:, 1:-1])  # 制造业的数据
+fujian_g_zzy_target = np.array(fujian_g_zzy.iloc[:, -1])  # 制造业的分类
+# 去除string类型
+fujian_g_zzy_num = np.delete(fujian_g_zzy_num, -1, axis=1)
+
+
+# In[97]:
+
+
+fujian_zzy = fujian_g[fujian_g['所属行业'].isin(['制造业'])]
+# 数据集划分
+zzy_train_xj, zzy_test_xj, zzy_train_yj, zzy_test_yj = train_test_split(fujian_g_zzy, fujian_g_zzy_target, test_size=0.4)
+# 制造业数据集划分
+zzy_train_x, zzy_test_x, zzy_train_y, zzy_test_y = train_test_split(fujian_g_zzy_num, fujian_g_zzy_target, test_size=0.4)
+
+
+# In[221]:
+
+
+#GBDT算法预测（本研究训练与决策树做对比）
+# 制造业预测
+gbr = GradientBoostingClassifier(n_estimators=3000, max_depth=2, min_samples_split=2, learning_rate=0.1)
+gbr.fit(train_zzy_num, train_zzy_target.ravel())
+joblib.dump(gbr, 'zzy_train.m')
+# 模型训练
+gbr = joblib.load('zzy_train.m') # 加载模型
+train_k = gbr.predict(zzy_train_x)
+train_k = np.reshape(train_k,(1465, 1))
+# 预测结果
+gbr = joblib.load('zzy_train.m') # 加载模型
+test_zzy = gbr.predict(zzy_test_x)
+test_zzy = np.reshape(test_zzy, (977, 1))
+# 保存预测结果
+df = pd.DataFrame()
+test_zzy_all = zzy_test_xj[zzy_test_xj['所属行业'].isin(['制造业'])]
+df['股票代码'] = zzy_test_xj['股票代码']
+df['是否在当年造假'] = test_zzy
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./制造业造假预测.csv", header=None, index=None)
+df
+
+
+# In[306]:
+
+
+model_zzy = DecisionTreeClassifier(criterion='gini', max_depth=5, class_weight='balanced')  # 逻辑回归模型构建
+model_zzy.fit(zzy_train_x,zzy_train_y)  # 模型训练
+zzy_pre_y = model_zzy.predict(zzy_test_x)  # 模型预测
+df = pd.DataFrame()
+df['股票代码'] = zzy_test_xj['股票代码']
+df['是否在当年造假'] = zzy_pre_y
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./制造业造假预测.csv", header=None, index=None)
+df
+
+
+# ## 信息传输、软件和信息技术服务业第六年造假预测
+
+# In[114]:
+
+
+# 数据整理
+
+
+# In[118]:
+
+
+path = 'G:/zm/正在参加比赛/泰迪杯/第九届泰迪杯/比赛/数据/第1-5年归一化数据.csv'
+f = open(path,encoding='gbk')
+fujian_g = pd.read_csv(f)
+xxy_yuan = fujian_g[fujian_g['所属行业'].isin(['信息传输、软件和信息技术服务业'])]
+xxy_yuan
+
+
+# In[119]:
+
+
+# 删去标识列
+xxy_g = np.array(xxy_yuan)
+xxy_g = np.delete(xxy_g, [0,1,-1], axis=1)
+xxy_g
+
+
+# In[120]:
+
+
+xxy_target = np.array(xxy_yuan.iloc[:, -1])  
+xxy_target
+
+
+# In[121]:
+
+
+# 数据集划分
+xxy_train_xj, xxy_test_xj, xxy_train_yj, xxy_test_yj = train_test_split(xxy_yuan, xxy_target, test_size=0.4)
+# 信息传输、软件和信息技术服务业数据集划分
+xxy_train_x, xxy_test_x, xxy_train_y, xxy_test_y = train_test_split(xxy_g, xxy_target, test_size=0.4)
+
+
+# In[222]:
+
+
+#GBDT算法预测（本研究训练与决策树做对比）
+# 信息传输、软件和信息技术服务业预测
+gbr = GradientBoostingClassifier(n_estimators=3000, max_depth=2, min_samples_split=2, learning_rate=0.1)
+gbr.fit(xxy_train_x, xxy_train_y)
+joblib.dump(gbr, 'xxy_train.m')
+# 模型训练
+gbr = joblib.load('xxy_train.m') # 加载模型
+train_x = gbr.predict(xxy_train_x)
+train_x = np.reshape(train_x,(176, 1))
+# 预测结果
+gbr = joblib.load('xxy_train.m') # 加载模型
+test_xxy = gbr.predict(xxy_test_x)
+test_xxy = np.reshape(test_xxy, (118, 1))
+# 保存预测结果
+df = pd.DataFrame()
+df['股票代码'] = xxy_test_xj['股票代码']
+df['是否在当年造假'] = test_xxy
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./信息传输、软件和信息技术服务业造假预测.csv", header=None, index=None)
+df
+
+
+# In[273]:
+
+
+model_xxy = DecisionTreeClassifier(criterion='gini', max_depth=5, class_weight='balanced')  # 逻辑回归模型构建
+model_xxy.fit(xxy_train_x,xxy_train_y)  # 模型训练
+xxy_pre_y = model_xxy.predict(xxy_test_x)  # 模型预测
+df = pd.DataFrame()
+df['股票代码'] = xxy_test_xj['股票代码']
+df['是否在当年造假'] = xxy_pre_y
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./信息传输、软件和信息技术服务业造假预测.csv", header=None, index=None)
+df
+
+
+# ## 采矿业造假预测
+
+# In[126]:
+
+
+cky_yuan = fujian_g[fujian_g['所属行业'].isin(['采矿业'])]
+cky_yuan
+
+
+# In[127]:
+
+
+# 删去标识列
+cky_g = np.array(cky_yuan)
+cky_g = np.delete(cky_g, [0,1,-1], axis=1)
+cky_g
+
+
+# In[128]:
+
+
+cky_target = np.array(cky_yuan.iloc[:, -1])  
+cky_target
+
+
+# In[276]:
+
+
+# 数据集划分
+cky_train_xj, cky_test_xj, cky_train_yj, cky_test_yj = train_test_split(cky_yuan, cky_target, test_size=0.2)
+# 信息传输、软件和信息技术服务业数据集划分
+cky_train_x,cky_test_x, cky_train_y, cky_test_y = train_test_split(cky_g, cky_target, test_size=0.2)
+
+
+# In[267]:
+
+
+#GBDT算法预测（本研究训练与决策树做对比）
+# 信息传输、软件和信息技术服务业预测
+gbr = GradientBoostingClassifier(n_estimators=3000, max_depth=2, min_samples_split=2, learning_rate=0.1)
+gbr.fit(cky_train_x, cky_train_y)
+joblib.dump(gbr, 'cky_train.m')
+# 模型训练
+gbr = joblib.load('cky_train.m') # 加载模型
+train_x = gbr.predict(cky_train_x)
+train_x = np.reshape(train_x,(52, 1))
+# 预测结果
+gbr = joblib.load('cky_train.m') # 加载模型
+test_cky = gbr.predict(cky_test_x)
+test_cky = np.reshape(test_cky, (23, 1))
+# 保存预测结果
+df = pd.DataFrame()
+df['股票代码'] = cky_test_xj['股票代码']
+df['是否在当年造假'] = test_cky
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./采矿业造假预测.csv", header=None, index=None)
+df
+
+
+# In[304]:
+
+
+model_cky = DecisionTreeClassifier(criterion='gini', max_depth=5, class_weight='balanced')  # 逻辑回归模型构建
+model_cky.fit(cky_train_x,cky_train_y)  # 模型训练
+cky_pre_y = model_cky.predict(cky_test_x)  # 模型预测
+df = pd.DataFrame()
+df['股票代码'] = cky_test_xj['股票代码']
+df['是否在当年造假'] = cky_pre_y
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./采矿业造假预测.csv", header=None, index=None)
+df
+
+
+# ## 电力、热力、燃气及水生产和供应业造假预测
+
+# In[285]:
+
+
+dly_yuan = fujian_g[fujian_g['所属行业'].isin(['电力、热力、燃气及水生产和供应业'])]
+dly_yuan = dly_yuan.dropna()
+dly_yuan
+
+
+# In[286]:
+
+
+# 删去标识列
+dly_g = np.array(dly_yuan)
+dly_g = np.delete(dly_g, [0,1,-1], axis=1)
+dly_g
+
+
+# In[287]:
+
+
+dly_target = np.array(dly_yuan.iloc[:, -1])  
+dly_target
+
+
+# In[288]:
+
+
+# 数据集划分
+dly_train_xj, dly_test_xj, dly_train_yj, dly_test_yj = train_test_split(dly_yuan, dly_target, test_size=0.5)
+# 信息传输、软件和信息技术服务业数据集划分
+dly_train_x,dly_test_x, dly_train_y, dly_test_y = train_test_split(dly_g, dly_target, test_size=0.5)
+
+
+# In[268]:
+
+
+#GBDT算法预测（本研究训练与决策树做对比）
+# 信息传输、软件和信息技术服务业预测
+gbr = GradientBoostingClassifier(n_estimators=3000, max_depth=2, min_samples_split=2, learning_rate=0.1)
+gbr.fit(dly_train_x, dly_train_y)
+joblib.dump(gbr, 'dly_train.m')
+# 模型训练
+gbr = joblib.load('dly_train.m') # 加载模型
+train_x = gbr.predict(dly_train_x)
+train_x = np.reshape(train_x,(57, 1))
+# 预测结果
+gbr = joblib.load('dly_train.m') # 加载模型
+test_dly = gbr.predict(dly_test_x)
+test_dly = np.reshape(test_dly, (58, 1))
+# 保存预测结果
+df = pd.DataFrame()
+df['股票代码'] = dly_test_xj['股票代码']
+df['是否在当年造假'] = test_dly
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./电力、热力、燃气及水生产和供应业造假预测.csv", header=None, index=None)
+df
+
+
+# In[289]:
+
+
+model_dly = DecisionTreeClassifier(criterion='gini', max_depth=5, class_weight='balanced')  # 逻辑回归模型构建
+model_dly.fit(dly_train_x,dly_train_y)  # 模型训练
+dly_pre_y = model_dly.predict(dly_test_x)  # 模型预测
+df = pd.DataFrame()
+df['股票代码'] = dly_test_xj['股票代码']
+df['是否在当年造假'] = dly_pre_y
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./电力、热力、燃气及水生产和供应业造假预测.csv", header=None, index=None)
+df
+
+
+# ## 房地产业造假预测
+
+# In[302]:
+
+
+fdy_yuan = fujian_g[fujian_g['所属行业'].isin(['房地产业'])]
+fdy_yuan = fdy_yuan.dropna()
+# 删去标识列
+fdy_g = np.array(fdy_yuan)
+fdy_g = np.delete(fdy_g, [0,1,-1], axis=1)
+fdy_target = np.array(fdy_yuan.iloc[:, -1])  
+# 数据集划分
+fdy_train_xj, fdy_test_xj, fdy_train_yj, fdy_test_yj = train_test_split(fdy_yuan, fdy_target, test_size=0.5)
+# 信息传输、软件和信息技术服务业数据集划分
+fdy_train_x,fdy_test_x, fdy_train_y,fdy_test_y = train_test_split(fdy_g, fdy_target, test_size=0.5)
+
+
+# In[303]:
+
+
+model_fdy = DecisionTreeClassifier(criterion='gini', max_depth=5, class_weight='balanced')  # 逻辑回归模型构建
+model_fdy.fit(fdy_train_x,fdy_train_y)  # 模型训练
+fdy_pre_y = model_fdy.predict(fdy_test_x)  # 模型预测
+df = pd.DataFrame()
+df['股票代码'] = fdy_test_xj['股票代码']
+df['是否在当年造假'] = fdy_pre_y
+df = df[df['是否在当年造假'].isin(['1'])]
+df.to_csv("./房地产业造假预测.csv", header=None, index=None)
+df
+

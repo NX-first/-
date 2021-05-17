@@ -1,0 +1,60 @@
+# -
+
+import os
+import time
+import calendar
+import numpy as np
+ans = {}
+def Find():
+    L = []
+    global ans
+    for key1 in ans:
+        for key2 in ans[key1]:
+            for key3 in ans[key1][key2]:
+                for i in ans[key1][key2][key3]:
+                    L.append(key1 + '.' + key2 + '.' + key3 + '.' + i)
+    print(len(L), [i for i in L])
+    pass
+def Add(year, month, day, val):
+    global ans
+    if year in ans:
+        if month in ans[year]:
+            if day in month:
+                L = list(ans[year][month][day])
+                L.append(val)
+                ans[year][month][day] = L
+                return
+    ans.update({year: month})
+    ans.update({year: {month: day}})
+    L = []
+    L.append(val)
+    ans.update({year: {month: {day: L}}})
+def Del(year, month, day, val):
+    global ans
+    if year in ans:
+        if month in ans[year]:
+            if day in month:
+                del ans[year][month][day]
+    pass
+def solve():
+    op = input('请选择操作：\n0：退出\n1：添加日程\n2：删除日程\n')
+    if op == '0':
+        return
+    date = input('请按照 年.月.日 形式输入日期：').split('.')
+    title = input('请输入添加或删除的内容：')
+    if len(date) == 1:
+        date.append('None'), date.append('None')
+    if len(date) == 2:
+        date.append('None')
+    print(op, date, title)
+    if op == '1':
+        Add(date[0], date[1], date[2], title)
+    elif op == '2':
+        Del(date[0], date[1], date[2], title)
+    return 1
+    pass
+if __name__ == '__main__':
+    while(solve()): pass
+    Find()
+    pass
+
